@@ -1,0 +1,25 @@
+version: '0'
+services:
+  causalgraph:
+    build:
+      context: CausalGraph
+    ports:
+      - "90:80"
+  neo4j:
+    image: "neo4j:5.15.0"
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    hostname: neo4j
+    volumes:
+      -  /data/neo4j:/data
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider localhost:7474 || exit 1"]
+    environment:
+      - NEO4J_AUTH=neo4j/password
+    user: neo4j
+  graphdbaccess:
+    build:
+      context: GraphDBAccess
+    ports:
+      - "3000:3000"
